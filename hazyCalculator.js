@@ -1,18 +1,47 @@
 function isSkippedValue(value) {
-  return !value
+  //it is true that '' and undefined should be skipped
+  if(value === '') {
+    return true
+  } else if(value === undefined){
+    return true
+  } else {
+    return false
+  }
 }
 
 function isNumericValue(value) {
-  return !isNaN(value)
+  //do not treat undefined nor '' as a number but null should be treated as a number
+  if (value === undefined) {
+    return false
+  }if (value === '') {
+    return false
+  } else if(isNaN(value)) {
+    return false
+  } else if (value === null) {
+    return true
+  }else{
+    return true
+  }
+  
 }
 
 function isNothingValue(value) {
-  return value === null
+  //null, undefined, and  '' should be treated as nothing
+  if (value === null){
+    return true
+  } else if (value === undefined) {
+    return true
+  } else if (value === '') {
+    return true
+  } else {
+    return false
+  }
 }
 
 function isAcceptableValue(value) {
   const operators = ['+', '-', '*', '/']
-  return typeof value === Number || operators.includes(value)
+  //coerce value to be processed as a integer use - parseInt()
+  return typeof parseInt(value) === 'number' || operators.includes(value)
 }
 
 function performCalculationStep(firstOperand, operator, secondOperand) {
@@ -33,12 +62,11 @@ function performCalculationStep(firstOperand, operator, secondOperand) {
 function calculate(calculationSteps) {
   let total
   let operator
-
+  
   calculationSteps.forEach(nextCalculationStep => {
     if (!isAcceptableValue(nextCalculationStep)) {
       throw new Error('Invalid input!')
     }
-
     if (isNothingValue(total) && isNumericValue(nextCalculationStep)) {
       total = Number(nextCalculationStep)
 
